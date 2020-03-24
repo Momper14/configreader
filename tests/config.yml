@@ -1,0 +1,5 @@
+datasource:
+  server: "mssql.server"
+  test:
+    val1: "foo"
+    val2: "bar"
