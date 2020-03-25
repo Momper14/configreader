@@ -1,10 +1,14 @@
 import confuse
-from os import environ
 import inspect
+import sys
+
+from os import environ, path
+
 
 primitive = (int, float, complex, str, bool)
 
-__configfile__ = "config.yml"
+__configfile__ = "{}/config.yml".format(
+    path.abspath(path.dirname(sys.argv[0])))
 
 config = None
 

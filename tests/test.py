@@ -1,4 +1,4 @@
-from spconfigreader import reader
+from spconfigreader import configreader
 
 import unittest
 
@@ -43,7 +43,7 @@ class TestSum(unittest.TestCase):
         match.test.val1 = "foo"
         match.test.val2 = "bar"
 
-        result = reader.getObject(Datasource())
+        result = configreader.getObject(Datasource())
 
         self.assertEqual(result, match)
 

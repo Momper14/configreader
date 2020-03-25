@@ -1,3 +1,3 @@
-from spconfigreader import reader
+from spconfigreader import configreader
 
-reader.__configfile__="tests/config.yml"
+configreader.__configfile__ = "tests/config.yml"

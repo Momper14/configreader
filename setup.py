@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='spconfigreader',
-    version='0.2.0',
+    version='0.3.1',
     author="Moritz Momper",
     author_email="moritz.momper@gmail.com",
     description="A utitlity to read config from yaml-files and environment (like Spring for Java)",
