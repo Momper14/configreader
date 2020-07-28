@@ -32,6 +32,9 @@ class Datasource:
             return False
         return self.server == value.server and self.port == value.port and self.protocol == value.protocol and self.test == value.test
 
+    def function(self):
+        pass
+
 
 class TestSum(unittest.TestCase):
     def test_getObject(self):

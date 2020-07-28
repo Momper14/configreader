@@ -1,6 +1,7 @@
 import confuse
 import inspect
 import sys
+import collections
 
 from os import environ, path
 
@@ -55,15 +56,14 @@ def _getFromYAML(path: str):
     return val
 
 
-def get(key: str, name: str, default: str = None):
-    path = _buildPath(key, name)
+def get(key: str, default: str = None):
 
-    val = _getFromENV(path)
+    val = _getFromENV(key)
     if val is not None:
         return val
 
     try:
-        val = _getFromYAML(path).get()
+        val = _getFromYAML(key).get()
         if val is not None:
             return val
 
@@ -78,9 +78,9 @@ def get(key: str, name: str, default: str = None):
 
 def _attributesOfObject(obj: object) -> list:
     attributes = [attr for attr in vars(
-        type(obj))["__annotations__"] if attr[0] is not '_']
-    attributes += [attr for attr in vars(type(obj)) if attr[0] is not '_']
-    attributes += [attr for attr in vars(obj) if attr[0] is not '_']
+        type(obj))["__annotations__"] if attr[0] != '_']
+    attributes += [attr for attr in vars(type(obj)) if attr[0] != '_']
+    attributes += [attr for attr in vars(obj) if attr[0] != '_']
 
     return list(dict.fromkeys(attributes))
 
@@ -125,10 +125,13 @@ def getObject(obj: object, path: str = None) -> object:
     attributes = _attributesOfObject(obj)
 
     for attr in attributes:
+        val = _getAttrVal(obj, attr)
+        if isinstance(val, collections.abc.Callable):
+            continue
+
         if _isObject(obj, attr):
-            vars(obj)[attr] = getObject(_getAttrVal(
-                obj, attr), "{}.{}".format(basepath, attr))
+            vars(obj)[attr] = getObject(val, "{}.{}".format(basepath, attr))
         else:
-            vars(obj)[attr] = get(basepath, attr, _getAttrVal(obj, attr))
+            vars(obj)[attr] = get(_buildPath(basepath, attr), val)
 
     return obj
